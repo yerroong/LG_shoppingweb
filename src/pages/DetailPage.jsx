@@ -91,8 +91,86 @@ const DetailPage = () => {
             {formatCurrency(product.price)}
           </p>
           <p style={{ marginBottom: "24px" }}>카테고리 : {product.category}</p>
+
+          {/* 수량 선택 및 장바구니 버튼 */}
+          <div
+            style={{
+              display: "flex",
+              gap: "16px",
+              alignItems: "center",
+              marginBottom: "40px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+              }}
+            >
+              <button
+                onClick={decrease}
+                style={{
+                  padding: "8px 16px ",
+                  border: "none",
+                  backgroundColor: "#f5f5f5",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                }}
+              >
+                -
+              </button>
+              <span
+                style={{
+                  padding: " 8px 24px",
+                  minWidth: "60px",
+                  textAlign: "center",
+                }}
+              >
+                {count}
+              </span>
+              <button
+                onClick={increase}
+                style={{
+                  padding: "8px 16px ",
+                  border: "none",
+                  backgroundColor: "#f5f5f5",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                }}
+              >
+                +
+              </button>
+            </div>
+            <button
+              onClick={handleAddToCart}
+              style={{
+                padding: "12px 32px",
+                backgroundColor: "#3498db",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                fontSize: "16px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              장바구니 담기
+            </button>
+          </div>
         </div>
       </div>
+      {/* 탭 정보 */}
+      <DetailTabInfo />
+
+      {/* 유사 상품 */}
+      <SimilarProducts relatedProducts={filteredRelatedProducts} />
+
+      {/* 모달 */}
+      {isModalOpen && (
+        <Modal product={product} count={count} onClose={closeModal} />
+      )}
     </main>
   );
 };

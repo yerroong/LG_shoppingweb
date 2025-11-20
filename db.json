@@ -1026,31 +1026,22 @@
   ],
   "cart": [
     {
-      "id": "5",
-      "title": "14K/18K 네쥬 T라인 원터치 링 귀찌 귀걸이",
-      "img": "image5.jpg",
-      "price": 58000,
-      "category": "new",
-      "discount": 0,
-      "count": 1
+      "id": "12",
+      "title": "14K/18K 더블링 목걸이",
+      "img": "image8.jpg",
+      "price": 15059,
+      "discount": 17,
+      "category": "top",
+      "count": 22
     },
     {
       "id": "2",
       "title": "14K/18K 심플 진주 반지",
       "img": "image10.jpg",
       "price": 147445,
-      "category": "new",
       "discount": 46,
-      "count": 9
-    },
-    {
-      "id": "4",
-      "title": "14K/18K 심플 반지",
-      "img": "image9.jpg",
-      "price": 418907,
       "category": "new",
-      "discount": 18,
-      "count": 3
+      "count": 7
     }
   ]
 }

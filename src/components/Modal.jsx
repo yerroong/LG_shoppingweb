@@ -1,15 +1,26 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { addToCart } from "@/api/cartApi";
 
 const Modal = ({ product, count, onClose }) => {
   const navigate = useNavigate();
 
-  const handleAddToCart = () => {
-    // 나중에 장바구니 연결
-    alert(`${product.title} ${count}개를 장바구니에 추가하셨습니다.`);
+  const handleAddToCart = async () => {
+    const cartItem = {
+      id: product.id,
+      title: product.title,
+      img: product.img,
+      price: product.price,
+      discount: product.discount,
+      category: product.category,
+      count: count,
+    };
+
+    await addToCart(cartItem);
     onClose();
     navigate("/cart");
   };
+
   return (
     <div
       onClick={onClose}

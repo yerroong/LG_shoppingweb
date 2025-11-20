@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import css from "./Pagination.module.css";
 
 const Pagination = ({ initProductsData }) => {
   const [searchParams] = useSearchParams();
@@ -14,7 +15,7 @@ const Pagination = ({ initProductsData }) => {
     navigate(`/shop/?${params}`);
   };
 
-  // 페이지 번호 계산 (최대 10개)
+  // 페이지 번호 계산 (ex.최대 5~10개)
   const getPageNumbers = () => {
     const maxPageNumbers = 5;
     if (pages <= maxPageNumbers) {
@@ -37,66 +38,31 @@ const Pagination = ({ initProductsData }) => {
   const pageNumbers = getPageNumbers();
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "8px",
-        justifyContent: "center",
-        marginTop: "40px",
-      }}
-    >
+    <div className={css.paginationArea}>
       <button
         onClick={() => handlePageChange(first)}
         disabled={currentPage === first}
-        style={{
-          padding: "8px 12px",
-          cursor: currentPage === first ? "not-allowed" : "pointer",
-        }}
       >
         처음
       </button>
-      <button
-        onClick={() => handlePageChange(prev)}
-        disabled={prev === null}
-        style={{
-          padding: "8px 12px",
-          cursor: prev === null ? "not-allowed" : "pointer",
-        }}
-      >
+      <button onClick={() => handlePageChange(prev)} disabled={prev === null}>
         이전
       </button>
       {pageNumbers.map((num) => (
         <button
           key={num}
           onClick={() => handlePageChange(num)}
-          style={{
-            padding: "8px 12px",
-            backgroundColor: num === currentPage ? "#3498db" : "white",
-            color: num === currentPage ? "white" : "black",
-            border: "1px solid #ddd",
-            cursor: "pointer",
-          }}
+          className={num === currentPage ? css.active : undefined}
         >
           {num}
         </button>
       ))}
-      <button
-        onClick={() => handlePageChange(next)}
-        disabled={next === null}
-        style={{
-          padding: "8px 12px",
-          cursor: next === null ? "not-allowed" : "pointer",
-        }}
-      >
+      <button onClick={() => handlePageChange(next)} disabled={next === null}>
         다음
       </button>
       <button
         onClick={() => handlePageChange(last)}
         disabled={currentPage === last}
-        style={{
-          padding: "8px 12px",
-          cursor: currentPage === last ? "not-allowed" : "pointer",
-        }}
       >
         마지막
       </button>

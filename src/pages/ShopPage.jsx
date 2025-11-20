@@ -4,6 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import Pagination from "@/components/Pagination";
 import CategoryButton from "@/components/CategoryButton";
 import SortItem from "@/components/SortItem";
+import css from "./ShopPage.module.css";
 
 const ShopPage = () => {
   const navigate = useNavigate();
@@ -57,99 +58,72 @@ const ShopPage = () => {
     { id: "new", label: "신상품" },
     { id: "top", label: "인기상품" },
   ];
-  return (
-    <main style={{ padding: "40px", maxWidth: "1200px", margin: "0 auto" }}>
-      <h2 style={{ marginBottom: "30px" }}>Shop Page</h2>
 
-      {/* 필터(카테고리) 및 정렬 영역 */}
-      <div
-        style={{
-          marginBottom: "30px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        {/* 카테고리 버튼 */}
-        <div>
-          {categories.map((cate) => (
-            <CategoryButton
-              key={cate.id}
-              cate={cate.id}
-              label={cate.label}
-              handleCategoryFilter={handleCategoryFilter}
-              currentCategory={
-                currentCategory === null && cate.id === ""
-                  ? null
-                  : currentCategory
-              }
-            />
-          ))}
+  return (
+    <main>
+      <section className={css.shopPage}>
+        <h2>Shop Page</h2>
+
+        {/* 필터(카테고리) 및 정렬 영역 */}
+        <div className={css.searchFn}>
+          {/* 카테고리 버튼 */}
+          <div className={css.category}>
+            {categories.map((cate) => (
+              <CategoryButton
+                key={cate.id}
+                cate={cate.id}
+                label={cate.label}
+                handleCategoryFilter={handleCategoryFilter}
+                currentCategory={
+                  currentCategory === null && cate.id === ""
+                    ? null
+                    : currentCategory
+                }
+              />
+            ))}
+          </div>
+
+          {/* 정렬 드롭다운 */}
+          <div className={`${css.sort} ${isDown ? css.active : ""}`}>
+            <button
+              onClick={() => setIsDown(!isDown)}
+              className={css.sortHeader}
+            >
+              {getSortText()}
+              <i>{isDown ? "▲" : "▼"}</i>
+            </button>
+            {isDown && (
+              <ul>
+                {sortOptions.map((sortOpt) => (
+                  <SortItem
+                    key={sortOpt.option}
+                    option={sortOpt.option}
+                    handleSort={handleSort}
+                    currentSort={sortCase}
+                    label={sortOpt.label}
+                  />
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
-        {/* 정렬 드롭다운 */}
-        <div style={{ position: "relative" }}>
-          <button
-            onClick={() => setIsDown(!isDown)}
-            style={{
-              padding: "8px 16px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              cursor: "pointer",
-              minWidth: "120px",
-            }}
-          >
-            {getSortText()} {isDown ? "▲" : "▼"}
-          </button>
-          {isDown && (
-            <ul
-              style={{
-                position: "absolute",
-                top: "100%",
-                right: 0,
-                marginTop: "4px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                backgroundColor: "white",
-                padding: 0,
-                listStyle: "none",
-                zIndex: 10,
-              }}
-            >
-              {sortOptions.map((sortOpt) => (
-                <SortItem
-                  key={sortOpt.option}
-                  option={sortOpt.option}
-                  handleSort={handleSort}
-                  currentSort={sortCase}
-                  label={sortOpt.label}
-                />
-              ))}
-            </ul>
+        {/* 상품 리스트 */}
+        <div className={css.productList}>
+          {data.length === 0 ? (
+            <p>상품이 없습니다.</p>
+          ) : (
+            <>
+              <div className={css.list}>
+                {data.map((product) => (
+                  <ProductCard key={product.id} data={product}></ProductCard>
+                ))}
+              </div>
+              <Pagination initProductsData={initProductsData}></Pagination>
+            </>
           )}
         </div>
-      </div>
-      {/* 상품 리스트 */}
-      <div>
-        {data.length === 0 ? (
-          <p style={{ textAlign: "center" }}>상품이 없습니다.</p>
-        ) : (
-          <>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(250px,1fr))",
-                gap: "20px",
-              }}
-            >
-              {data.map((product) => (
-                <ProductCard key={product.id} data={product}></ProductCard>
-              ))}
-            </div>
-            <Pagination initProductsData={initProductsData}></Pagination>
-          </>
-        )}
-      </div>
+      </section>
     </main>
   );
 };

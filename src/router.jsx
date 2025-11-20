@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Default from "./layout/Default";
 import NotFound from "./pages/NotFound";
 import { shopPageLoader, detailPageLoader } from "./loaders/productsLoaders";
+import { cartPageLoader } from "./loaders/cartLoaders";
 
 // 일반 import
 import MainPage from "./pages/MainPage";
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
       { path: "/blog", element: <BlogPage /> },
       // { path: "/*", element: <NotFound /> },
       { path: "/shop", element: <ShopPage />, loader: shopPageLoader },
-      { path: "/cart", element: <CartPage /> },
+      { path: "/cart", element: <CartPage />, loader: cartPageLoader },
       {
         path: "detail/:productId",
         element: <DetailPage />,
