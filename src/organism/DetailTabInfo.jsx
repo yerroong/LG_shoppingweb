@@ -1,54 +1,59 @@
 import React, { useState } from "react";
+import css from "./DetailTabInfo.module.css";
 
 const DetailTabInfo = () => {
   const [activeTab, setActive] = useState(0);
   const tabTitles = ["상품정보", "리뷰", "배송/교환/반품"];
 
   return (
-    <div
-      style={{
-        padding: "40px",
-        maxWidth: "1200px",
-        margin: "0 auto",
-      }}
-    >
-      <div
-        style={{ display: "flex", gap: "8px", borderBottom: "1px solid #ddd" }}
-      >
+    <div className={css.tabContainer}>
+      {/* 탭 헤더 */}
+      <div className={css.tabHeader}>
         {tabTitles.map((title, i) => (
           <button
             key={i}
             onClick={() => setActive(i)}
-            style={{
-              padding: "12px 24px",
-              border: "none",
-              borderBottom: activeTab === i ? "2px solid #3498db" : "none",
-              backgroundColor: "transparent",
-              cursor: "pointer",
-              fontWeight: activeTab === i ? "bold" : "normal",
-            }}
+            className={`${css.tabBtn} ${activeTab === i ? css.active : ""}`}
           >
             {title}
           </button>
         ))}
       </div>
-      <div style={{ padding: "20px 0" }}>
+      {/* 탭 내용 */}
+      <div className={css.tabContent}>
         {activeTab === 0 && (
-          <div>
+          <div className={css.tabPane}>
             <h3>상품 정보</h3>
-            <p>상품의 자세한 정보가 여기에 표시됩니다.</p>
+            <p>
+              본 상품은 엄선된 14K/18K 골드로 제작되었으며, 섬세한 세공이
+              돋보이는 프리미엄 주얼리입니다.
+              <br />
+              <br />
+              (여기에 상세 이미지나 구체적인 스펙이 들어갑니다.)
+            </p>
           </div>
         )}
         {activeTab === 1 && (
-          <div>
+          <div className={css.tabPane}>
             <h3>리뷰</h3>
-            <p>고객 리뷰가 여기에 표시됩니다.</p>
+            <p className={css.emptyText}>아직 작성된 리뷰가 없습니다.</p>
           </div>
         )}
         {activeTab === 2 && (
-          <div>
+          <div className={css.tabPane}>
             <h3>배송/교환/반품 안내</h3>
-            <p>배송 및 교환/반품 안내입니다.</p>
+            <ul className={css.guideList}>
+              <li>
+                배송 기간: 주문 제작 상품으로 주말/공휴일 제외 7~10일 소요
+              </li>
+              <li>
+                교환/반품: 상품 수령 후 7일 이내 (단, 주문 제작 상품은 단순 변심
+                반품 불가)
+              </li>
+              <li>
+                A/S: 구매일로부터 1년 무상 수리 (부속품 분실 및 고객 과실 제외)
+              </li>
+            </ul>
           </div>
         )}
       </div>

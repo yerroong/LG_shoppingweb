@@ -119,11 +119,11 @@ const ShopPage = () => {
                   <ProductCard key={product.id} data={product}></ProductCard>
                 ))}
               </div>
-              <Pagination initProductsData={initProductsData}></Pagination>
             </>
           )}
         </div>
       </section>
+      <Pagination initProductsData={initProductsData}></Pagination>
     </main>
   );
 };

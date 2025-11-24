@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, Link } from "react-router-dom";
 import { formatCurrency } from "@/utils/features";
 import { updateCartItemCount, removeFromCart } from "@/api/cartApi";
+import css from "./CartPage.module.css";
+import ConfirmModal from "@/components/ConfirmModal";
 
 const CartPage = () => {
   const cartList = useLoaderData();
@@ -48,105 +50,85 @@ const CartPage = () => {
     }
   };
 
-  // 장바구니에서 삭제
-  const handleDelete = (id) => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      setItems((prev) => prev.filter((item) => item.id !== id));
-      removeFromCart(id).catch((err) => console.log("err", err));
+  // 장바구니에서 삭제 window 기능을 사용한 삭제 기능
+  // const handleDelete = (id) => {
+  //   if (window.confirm("정말 삭제하시겠습니까?")) {
+  //     setItems((prev) => prev.filter((item) => item.id !== id));
+  //     removeFromCart(id).catch((err) => console.log("err", err));
+  //   }
+  // };
+
+  // 삭제 모달 추가
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+
+  // 1. 삭제 버튼 클릭 시 실행
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setIsModalOpen(true);
+  };
+
+  // 2. 모달에서 '삭제' 클릭 시 실제 삭제 진행
+  const confirmDelete = () => {
+    if (deleteId) {
+      setItems((prev) => prev.filter((item) => item.id !== deleteId));
+      removeFromCart(deleteId).catch((err) => console.log("err", err));
     }
+    setIsModalOpen(false);
+    setDeleteId(null);
+  };
+
+  // 3. 모달 닫기
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setDeleteId(null);
   };
 
   return (
-    <main style={{ padding: "40px", maxWidth: "1200px", margin: "0 auto" }}>
-      <h2 style={{ marginBottom: "30px" }}>My Cart</h2>
+    <main className={css.cartContainer}>
+      <h2 className={css.pageTitle}>My Cart</h2>
       {items.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "60px" }}>
-          <p style={{ fontSize: "24px", marginBottom: "20px" }}>
-            장바구니가 비었습니다.{" "}
-          </p>
-          <p style={{ fontSize: "18px" }}>신상품이나 인기상품을 찾아보세요. </p>
+        <div className={css.emptyCart}>
+          <p>장바구니가 비었습니다.</p>
+          <p>신상품이나 인기상품을 찾아보세요. </p>
         </div>
       ) : (
         <>
-          <p style={{ marginBottom: "20px" }}>
+          <p className={css.infoText}>
             장바구니 리스트는 <strong>{items.length}</strong> 개 이고 , 총 상품
             갯수는<strong>{totalCount}</strong> 개 입니다.
           </p>
 
           {/* 장바구니 아이템 리스트 */}
-          <div style={{ marginBottom: "40px" }}>
+          <div className={css.cartList}>
             {items.map((item) => (
-              <div
-                key={item.id}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "100px 2fr 1fr 150px 1fr 50px",
-                  gap: "20px",
-                  alignItems: "center",
-                  padding: "20px",
-                  borderBottom: "1px solid #ddd",
-                }}
-              >
+              <div key={item.id} className={css.cartItem}>
                 {/* 이미지 */}
-                <div
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    backgroundColor: "#f0f0f0",
-                    borderRadius: "4px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  이미지
+                <div className={css.imgWrap}>
+                  <Link to={`/detail/${item.id}`}>
+                    <img src={`/public/img/${item.img}`} alt={item.title} />
+                  </Link>
                 </div>
 
                 {/* 상품명 */}
-                <div>
-                  <strong>{item.title}</strong>
+                <div className={css.itemInfo}>
+                  <p className={css.itemTitle}>{item.title}</p>
                 </div>
 
                 {/* 가격 */}
-                <div>{formatCurrency(item.price)}</div>
+                <div className={css.itemPrice}>
+                  {formatCurrency(item.price)}
+                </div>
 
                 {/* 수량 조절 */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
-                >
-                  <button
-                    onClick={() => decrease(item.id)}
-                    style={{
-                      padding: "4px 12px",
-                      border: "1px solid #ddd",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    -
-                  </button>
-                  <span style={{ minWidth: "40px", textAlign: "center" }}>
-                    {item.count}
-                  </span>
-                  <button
-                    onClick={() => increase(item.id)}
-                    style={{
-                      padding: "4px 12px",
-                      border: "1px solid #ddd",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    +
-                  </button>
+                <div className={css.countControl}>
+                  <button onClick={() => decrease(item.id)}>-</button>
+                  <span>{item.count}</span>
+                  <button onClick={() => increase(item.id)}>+</button>
                 </div>
 
                 {/* 소계 */}
-                <div style={{ fontWeight: "bold" }}>
+                <div className={css.totalPrice}>
                   {formatCurrency(
                     Math.round(
                       item.price * item.count * (1 - (item.discount || 0) / 100)
@@ -156,14 +138,8 @@ const CartPage = () => {
 
                 {/* 삭제 버튼 */}
                 <button
-                  onClick={() => handleDelete(item.id)}
-                  style={{
-                    padding: "8px",
-                    border: "none",
-                    backgroundColor: "transparent",
-                    cursor: "pointer",
-                    fontSize: "20px",
-                  }}
+                  onClick={() => handleDeleteClick(item.id)}
+                  className={css.deleteBtn}
                 >
                   X
                 </button>
@@ -171,20 +147,24 @@ const CartPage = () => {
             ))}
           </div>
           {/* 총 금액 */}
-          <div
-            style={{
-              padding: "20px",
-              backgroundColor: "#f5f5f5",
-              borderRadius: "8px",
-              textAlign: "right",
-            }}
-          >
-            <p style={{ fontSize: "20px", marginBottom: "10px" }}>
-              총금액 : <strong>{formatCurrency(totalSum)}</strong>
+          <div className={css.cartPrice}>
+            <p>
+              총금액 :
+              <strong className={css.finalPrice}>
+                {" "}
+                {formatCurrency(totalSum)}
+              </strong>
             </p>
           </div>
         </>
       )}
+      {/* 삭제 모달 컴포넌트 */}
+      <ConfirmModal
+        isOpen={isModalOpen}
+        message="정말 장바구니에서 삭제하시겠습니까?"
+        onConfirm={confirmDelete}
+        onCancel={closeModal}
+      />
     </main>
   );
 };
