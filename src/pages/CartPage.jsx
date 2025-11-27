@@ -127,6 +127,9 @@ const CartPage = () => {
                   <button onClick={() => increase(item.id)}>+</button>
                 </div>
 
+                {/* 할인율 */}
+                <div>할인율 : {item.discount} %</div>
+
                 {/* 소계 */}
                 <div className={css.totalPrice}>
                   {formatCurrency(

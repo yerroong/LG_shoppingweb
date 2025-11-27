@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 import { formatCurrency } from "@/utils/features";
 import DetailTabInfo from "@/organism/DetailTabInfo";
@@ -18,6 +18,11 @@ const DetailPage = () => {
   const { product, filteredRelatedProducts } = useLoaderData();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [count, setCount] = useState(1);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCount(1);
+  }, [product.id]);
 
   if (!product) {
     return (

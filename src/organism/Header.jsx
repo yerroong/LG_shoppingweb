@@ -31,7 +31,7 @@ const Header = () => {
             <CustomNavLink to={"/blog"} label={"blog"} />
           </nav>
           <div className={css.icon}>
-            <CustomIconLink to={"/search"} icon={"bi-search"} />
+            <CustomIconLink to={"/shop?focus=true"} icon={"bi-search"} />
             <CustomIconLink to={"/mypage"} icon={"bi-person-circle"} />
             <CustomIconLink to={"/cart"} icon={"bi-basket"} />
           </div>

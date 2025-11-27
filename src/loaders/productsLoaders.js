@@ -13,16 +13,64 @@ export const shopPageLoader = async ({ request }) => {
   const category = url.searchParams.get("category") || "";
   const sort = url.searchParams.get("_sort") || "";
 
-  // 쿼리 문자열 만들기
-  let queryString = `_page=${page}&_per_page=${per_page}`;
-  if (category) queryString += `&category=${category}`;
-  if (sort) queryString += `&_sort=${sort}`;
+  // 검색 쿼리 or 파라미터
+  const q = url.searchParams.get("q") || "";
+
+  // axios params 객체 생성
+  const params = {};
+
+  // 카테고리 필터 추가
+  if (category) {
+    params.category = category;
+  }
+
+  // 정렬 옵션 추가
+  if (sort) {
+    params._sort = sort;
+  }
+
+  // 검색은 클라이언트 사이드에서 처리함 서버에서는 모든 데이터 가져오기
+  // 페이지네이션도 클라이언트에서 처리
 
   try {
-    const products = await getProductsData(queryString);
+    // 모든 상품 데이터 가져오기 (필터링, 정렬 이전)
+    const allProducts = await getProductsData(params);
+
+    // getProductsData는 배열을 반환하므로 배열로 처리
+    const productsArray = Array.isArray(allProducts) ? allProducts : [];
+
+    // 검색어로 필터링 (클라이언트 사이드)
+    let filteredData = productsArray;
+
+    if (q && q.trim()) {
+      const searchTerm = q.trim().toLowerCase();
+      filteredData = filteredData.filter(
+        (product) =>
+          product.title && product.title.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    // 페이지네이션 처리
+    const totalItems = filteredData.length;
+    const totalPages = Math.ceil(totalItems / per_page);
+    const startIndex = (page - 1) * per_page;
+    const endIndex = startIndex + per_page;
+    const paginationData = filteredData.slice(startIndex, endIndex);
+
+    // json-server 형식에 맞춰 반환
+    const products = {
+      data: paginationData,
+      total: totalItems,
+      pages: totalPages,
+      first: page === 1 ? null : 1,
+      last: totalPages,
+      prev: page > 1 ? page - 1 : null,
+      next: page < totalPages ? page + 1 : null,
+    };
+
     return { products, per_page };
   } catch (err) {
-    console.log("err---- productsLoader.js", err);
+    console.log("err", err);
     throw new Response("상품 데이터를 가져오는 중 오류 발생", {
       status: err.status || 500,
     });

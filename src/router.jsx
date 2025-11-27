@@ -12,6 +12,7 @@ import BlogPage from "./pages/BlogPage";
 import ShopPage from "./pages/ShopPage";
 import CartPage from "./pages/CartPage";
 import DetailPage from "./pages/DetailPage";
+import MyPage from "./pages/MyPage";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
         element: <DetailPage />,
         loader: detailPageLoader,
       },
+      { path: "/mypage", element: <MyPage /> },
     ],
   },
 ]);

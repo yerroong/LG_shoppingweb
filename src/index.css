@@ -16,11 +16,30 @@ body {
   font-weight: 200;
   font-style: normal;
 
-  /* font-family: "Nanum Brush Script", cursive !important;
-  font-weight: 400;
-  font-style: normal; */
-
   line-height: 1.6;
+
+  /* 사용자 지정 변수 */
+  --dark-colors-accent-dark: #b4a186;
+  --dark-colors-light-gray-dark: #9a9a9a;
+  --dark-colors-gray-dark: #3d3d3d;
+  --dark-colors-dark-gray-dark: #272727;
+  --dark-colors-black-dark: #0a0a0a;
+  --dark-colors-white-dark: #fbfbfb;
+  --light-colors-errors-light: #d82700;
+  --light-colors-accent-light: #a18a68;
+  --light-colors-black-light: #000000;
+  --light-colors-dark-gray-light: #707070;
+  --light-colors-gray-light: #d8d8d8;
+  --light-colors-light-gray-light: #efefef;
+  --light-colors-white-light: #ffffff;
+
+  --fs8: 8px;
+  --fs12: 12px;
+  --fs16: 16px;
+  --fs20: 20px;
+  --fs26: 24px;
+  --fs33: 33px;
+  --fs64: 64px;
 }
 
 body {

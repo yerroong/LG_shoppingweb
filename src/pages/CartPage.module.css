@@ -35,8 +35,8 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
   padding: 20px 30px;
   display: grid;
-  /* 이미지 / 제목 / 가격 / 수량 / 합계 / 삭제 */
-  grid-template-columns: 160px 1fr 120px 140px 140px 50px;
+  /* 이미지 / 제목 / 가격 / 수량 / 할인율 / 합계 / 삭제 */
+  grid-template-columns: 160px 1fr 120px 140px 140px 140px 50px;
   align-items: center;
   gap: 20px;
 }
